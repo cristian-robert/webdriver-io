@@ -82,7 +82,7 @@ services:
       - reportportal
 
   postgres:
-    image: roby248/custom_automation_postgres:latest
+    image: roby248/postgres:12.17-alpine3.17
     container_name: postgres
     logging:
       <<: *logging
@@ -93,6 +93,7 @@ services:
       POSTGRES_DB: &db_name reportportal
     volumes:
       - postgres:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
     ## Expose Database
     ports:
       - "5432:5432"

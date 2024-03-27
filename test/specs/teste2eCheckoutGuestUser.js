@@ -65,8 +65,9 @@ describe('e2e checkout as guest user', () => {
         const orderNumber = await checkoutPage.getOrderNumber();
         await databaseQuery.connect();
         const sql = `SELECT * FROM wp_wc_orders WHERE id = ${orderNumber}`;
-        const result = await databaseQuery.query(sql);
-        const billingEmail = result[0].billing_email;
+        const [rows, fields] = await databaseQuery.query(sql);
+        //get billing_email column from result
+        const billingEmail = rows[0].billing_email;
 
         // Check that customer provided email and DB email are same
         expect(billingEmail).toEqual(email);

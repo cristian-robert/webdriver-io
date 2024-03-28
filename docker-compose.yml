@@ -82,7 +82,7 @@ services:
       - reportportal
 
   postgres:
-    image: roby248/postgres:12.17-alpine3.17
+    image: postgres:12.17-alpine3.17
     container_name: postgres
     logging:
       <<: *logging

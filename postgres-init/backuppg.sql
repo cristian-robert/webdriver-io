@@ -13,7 +13,7 @@ SET standard_conforming_strings = on;
 -- Drop databases (except postgres and template1)
 --
 
-DROP DATABASE IF EXISTS reportportal;
+-- DROP DATABASE IF EXISTS reportportal;
 
 
 
@@ -22,14 +22,14 @@ DROP DATABASE IF EXISTS reportportal;
 -- Drop roles
 --
 
-DROP ROLE IF EXISTS rpuser;
+-- DROP ROLE IF EXISTS rpuser;
 
 
 --
 -- Roles
 --
 
-CREATE ROLE rpuser;
+-- CREATE ROLE rpuser;
 ALTER ROLE rpuser WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'md555ac352f42a08a5c66323e0f1414fced';
 
 --
@@ -76,7 +76,7 @@ DROP DATABASE template1;
 -- Name: template1; Type: DATABASE; Schema: -; Owner: rpuser
 --
 
-CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
 ALTER DATABASE template1 OWNER TO rpuser;
@@ -190,7 +190,7 @@ DROP DATABASE postgres;
 -- Name: postgres; Type: DATABASE; Schema: -; Owner: rpuser
 --
 
-CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
 ALTER DATABASE postgres OWNER TO rpuser;
@@ -272,7 +272,7 @@ SET row_security = off;
 -- Name: reportportal; Type: DATABASE; Schema: -; Owner: rpuser
 --
 
-CREATE DATABASE reportportal WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+-- CREATE DATABASE reportportal WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
 ALTER DATABASE reportportal OWNER TO rpuser;

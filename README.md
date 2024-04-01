@@ -17,6 +17,7 @@ First, let's talk about Docker Compose. This tool helps us set up multiple conta
 
 - **WordPress and a Database**: We've got a WordPress site with a pre-configured database ready to be tested against.
 - **Report Portal**: This is where the results of our tests will be displayed. We've set up projects, users, API keys, and everything else needed. You won't have to touch any settings here.
+- **User for report-portal**: User: wdio.user / Password: Pass1234!
 
 ### 2. Running Docker Compose
 

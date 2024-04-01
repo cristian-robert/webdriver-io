@@ -1,4 +1,3 @@
-
 const faker = require('@faker-js/faker').faker;
 const { expect } = require('@wdio/globals');
 
@@ -22,17 +21,11 @@ describe('Login to ecommerce application', () => {
 
         // Wait for the error message to be displayed in the application
         // Time out after waiting for 5 seconds and display error message if error message is not visible
-        await browser.waitUntil(
-            async () => myAccountPage.loginError.isDisplayed(),
-            {
-                timeout: 5000,
-                timeoutMsg: 'expected error message to be visible after 5s'
-            }
-        );
+        await myAccountPage.waitForLoginError();
 
         // Verify that the error message is as expected by asserting that it contains the specific message
         // If the text is not as expected, it will throw an error and fail the test case
-        expect(await myAccountPage.loginError.getText()).toContain(`Error: The username ${username} is not` +
+        expect(await myAccountPage.getLoginErrorText()).toContain(`Error: The username ${username} is not` +
             ' registered on this site. If you are unsure of your username, try your email address instead.');
     });
 });

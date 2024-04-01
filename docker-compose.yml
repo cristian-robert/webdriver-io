@@ -82,7 +82,7 @@ services:
       - reportportal
 
   postgres:
-    image: roby248/postgres:12.17-alpine3.17
+    image: postgres:12.17-alpine3.17
     container_name: postgres
     logging:
       <<: *logging
@@ -93,7 +93,6 @@ services:
       POSTGRES_DB: &db_name reportportal
     volumes:
       - postgres:/var/lib/postgresql/data
-      - ./postgres-init:/docker-entrypoint-initdb.d
     ## Expose Database
     ports:
       - "5432:5432"
@@ -122,9 +121,9 @@ services:
     logging:
       <<: *logging
     ## Expose RabbitMQ
-    # ports:
-    #   - "5672:5672"
-    #   - "15672:15672"
+    ports:
+       - "5672:5672"
+       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: &rabbitmq_user rabbitmq
       RABBITMQ_DEFAULT_PASS: &rabbitmq_password rabbitmq

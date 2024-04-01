@@ -21,18 +21,9 @@ describe('Register to ecommerce application', () => {
         // Attempt to register a new user with the random username, email and password
         await myAccountPage.register(username, email, password);
 
-        // Wait for the logout button to be displayed in the application
-        // Time out after waiting for 5 seconds and display error message if logout button is not visible
-        await browser.waitUntil(
-            async () => myAccountPage.logoutButton.isDisplayed(),
-            {
-                timeout: 5000,
-                timeoutMsg: 'expected logout button to be visible after 5s'
-            }
-        );
-
+        await myAccountPage.waitForLogoutButton();
         // Expect the content text to contain the username
-        expect(myAccountPage.getContentText()).toContain(`Hello ${username}`);
+        expect(await myAccountPage.getContentText()).toContain(`Hello ${username}`);
     });
 
     it('should logout a user', async () => {
@@ -40,12 +31,6 @@ describe('Register to ecommerce application', () => {
         await myAccountPage.clickLogoutButton();
         // Wait for the login button to be displayed in the application
         // Time out after waiting for 5 seconds and display error message if login button is not visible
-        await browser.waitUntil(
-            async () => myAccountPage.checkUserIsOnMyAccountLoginPage(),
-            {
-                timeout: 5000,
-                timeoutMsg: 'expected login button to be visible after 5s'
-            }
-        );
+        await myAccountPage.checkUserIsOnMyAccountLoginPage();
     });
 });

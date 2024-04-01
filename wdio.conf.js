@@ -3,7 +3,7 @@ const glob = require('glob');
 const { Reporter } = require('@reportportal/agent-js-webdriverio');
 const RPClient = require('@reportportal/client-javascript');
 const rpConfig  = {
-    apiKey: 'test_5TSlQwtTTq6TKBHDjAMnvWBtJMwLfL9e1r1sI_RokOU8Z3nsNk8f4gCg0Bjl6pUh',
+    apiKey: 'wdio_oLuoAuHiT9O3vTjVXVVvwAABaFc7y1a8KjFOq1N8gEiexEfv0kebxFbhZNl27_FM',
     endpoint: 'http://localhost:8080/api/v2',
     project: 'WebdriverIO_automation_framework',
     launch: 'Test launch',

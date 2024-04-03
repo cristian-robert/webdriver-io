@@ -29,12 +29,14 @@ exports.config = {
     exclude: [
         // 'path/to/excluded/files'
     ],
-    maxInstances: 10,
+    maxInstances: 1,
     capabilities: [{
         maxInstances: 5,
         browserName: 'chrome',
         acceptInsecureCerts: true
     }],
+    hostname: 'selenium-chrome', // Use the service name defined in docker-compose
+    port: 4444,
     logLevel: 'info',
     bail: 0,
     baseUrl: 'http://localhost:8000/',

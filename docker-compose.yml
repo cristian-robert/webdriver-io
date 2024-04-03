@@ -486,6 +486,11 @@ services:
       - ./jenkins_data:/var/jenkins_home
     restart: unless-stopped
 
+  selenium-chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+    shm_size: 2gb
 volumes:
   opensearch:
   storage:

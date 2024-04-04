@@ -2,101 +2,126 @@ const { $$, $ } = require('@wdio/globals')
 const Page = require('./page');
 
 class CheckoutPage extends Page {
-
-    // Returns the email address input field of the contact information section
     async contactInformationEmailAddress() {
         return $('#email');
     }
 
-    // Returns the first name input field of the billing address section
     async billingAddressFirstName() {
         return $('#billing-first_name');
     }
 
-    // Returns the last name input field of the billing address section
     async billingAddressLastName() {
         return $('#billing-last_name');
     }
 
-    // Returns the company name input field of the billing address section
     async billingAddressCompany() {
         return $('#billing-company');
     }
 
-    // Returns the address line1 input field of the billing address section
     async billingAddressAddress1() {
         return $('#billing-address_1');
     }
 
-    // Returns the address line2 input field of the billing address section
     async billingAddressAddress2() {
         return $('#billing-address_2');
     }
 
-    // Returns the city input field of the billing address section
     async billingAddressCity() {
         return $('#billing-city');
     }
 
-    // Returns the state input field of the billing address section
     async billingAddressState() {
         return $('#billing-state');
     }
 
-    // Returns the postcode input field of the billing address section
     async billingAddressPostcode() {
         return $('#billing-postcode');
     }
 
-    // Returns the phone number input field of the billing address section
     async billingAddressPhone() {
         return $('#billing-phone');
     }
 
-    // Returns the createAccount checkbox in the checkout page
     async createAccountCheckbox() {
         return $('#createaccount');
     }
 
-    // Returns the password input field of the account creation section
     async createAccountPassword() {
         return $('#account_password');
     }
 
-    // Returns the order notes checkbox in the checkout page
     async orderNotesCheckbox() {
         return $('.wc-block-checkout__add-note .wc-block-components-checkbox__input');
     }
 
-    // Similar functions exist for the shipping address details
+    async shippingAddressFirstName() {
+        return $('#shipping-first_name');
+    }
 
-    // Returns the country select list in the checkout page
+    async shippingAddressLastName() {
+        return $('#shipping-last_name');
+    }
+
+    async shippingAddressCompany() {
+        return $('#shipping-company');
+    }
+
+    async shippingAddressCountry() {
+        return $('#shipping-country');
+    }
+
+    async shippingAddressAddress1() {
+        return $('#shipping-address_1');
+    }
+
+    async shippingAddressAddress2() {
+        return $('#shipping-address_2');
+    }
+
+    async shippingAddressCity() {
+        return $('#shipping-city');
+    }
+
+    async shippingAddressState() {
+        return $('#shipping-state');
+    }
+
+    async shippingAddressPostcode() {
+        return $('#shipping-postcode');
+    }
+
+    async shippingAddressPhone() {
+        return $('#shipping-phone');
+    }
+
+    async useSameAddressCheckbox() {
+        return $('.wc-block-checkout__use-address-for-billing .wc-block-components-checkbox__input')
+    }
+
     async countrySelect() {
         return $('input#components-form-token-input-0');
     }
 
-    // Returns the place order button in the checkout page
+
     async placeOrderButton() {
         return $('.wc-block-components-checkout-place-order-button');
     }
 
-    // Returns the order number field present after the order is placed
     async orderNumber() {
         return $('.order strong');
     }
-
-    // Returns the order received message field displayed after the order is placed
     async orderReceivedMessage() {
         return $('p.woocommerce-notice');
     }
 
-    // Opens the checkout page by calling the open function from the Page class
+    async orderNotesComments() {
+        return $('.wc-block-components-textarea');
+    }
     async open() {
         await super.open('checkout');
     }
 
-    // Waits for the order received message to be displayed
-    // If the message is not displayed within 10s, timeoutMsg will be printed
+    // wait for order received message to be displayed
     async waitForOrderReceivedMessage() {
         const orderReceivedMessage = await this.orderReceivedMessage();
         await browser.waitUntil(
@@ -108,13 +133,11 @@ class CheckoutPage extends Page {
         );
     }
 
-    // Returns the text of the order number
     async getOrderNumber() {
         const orderNumber = await this.orderNumber();
         return await orderNumber.getText();
     }
 
-    // Waits for the checkout page to load by waiting for the place order button to be displayed
     async waitForCheckoutPageToLoad() {
         const placeOrderButton = await this.placeOrderButton();
         await browser.waitUntil(
@@ -125,21 +148,70 @@ class CheckoutPage extends Page {
             }
         );
     }
-
-    // Fills the checkout form fields with provided details
+    // fill checkout form
     async fillCheckoutForm(virtualProduct, firstName, lastName, email, phone, address1, city, postcode, country, state) {
-        // Logic for filling the form
+        const billingAddressFirstName = await this.billingAddressFirstName();
+        const billingAddressLastName = await this.billingAddressLastName();
+        const contactInformationEmailAddress = await this.contactInformationEmailAddress();
+        const billingAddressPhone = await this.billingAddressPhone();
+        const billingAddressAddress1 = await this.billingAddressAddress1();
+        const billingAddressCity = await this.billingAddressCity();
+        const billingAddressPostcode = await this.billingAddressPostcode();
+        const countrySelect = await this.countrySelect();
+        const billingState = await this.billingAddressState();
+
+        const shippingAddressFirstName = await this.shippingAddressFirstName();
+        const shippingAddressLastName = await this.shippingAddressLastName();
+        const shippingAddressAddress1 = await this.shippingAddressAddress1();
+        const shippingAddressCity = await this.shippingAddressCity();
+        const shippingAddressPostcode = await this.shippingAddressPostcode();
+        const shippingAddressPhone = await this.shippingAddressPhone();
+        const shippingAddressState = await this.shippingAddressState();
+        const orderNotes = await this.orderNotesCheckbox();
+        const orderNotesComments = await this.orderNotesComments();
+        const useSameAddressCheckbox = await this.useSameAddressCheckbox();
+
+        if(virtualProduct) {
+            await billingAddressFirstName.setValue(firstName);
+            await billingAddressLastName.setValue(lastName);
+            await contactInformationEmailAddress.setValue(email);
+            await billingAddressPhone.setValue(phone);
+            await billingAddressAddress1.setValue(address1);
+            await billingAddressCity.setValue(city);
+            await countrySelect.setValue(country);
+            await browser.keys('\uE007');
+            await billingState.setValue(state);
+            await browser.keys('\uE007');
+            await billingAddressPostcode.setValue(postcode);
+        }
+        else {
+            await contactInformationEmailAddress.setValue(email);
+            await shippingAddressFirstName.setValue(firstName);
+            await shippingAddressLastName.setValue(lastName);
+            await shippingAddressAddress1.setValue(address1);
+            await shippingAddressCity.setValue(city);
+            await shippingAddressPhone.setValue(phone);
+            await countrySelect.setValue(country);
+            await browser.keys('\uE007');
+            await shippingAddressState.setValue(state);
+            await browser.keys('\uE007');
+            await shippingAddressPostcode.setValue(postcode);
+            await useSameAddressCheckbox.click();
+        }
+
+        await orderNotes.click();
+        await orderNotesComments.setValue('Please deliver before 5pm');
     }
 
-    // Clicks the place order button to place the order
+    //place order
     async placeOrder() {
         const placeOrderButton = await this.placeOrderButton();
+
         await browser.waitUntil(async () =>
                 await placeOrderButton.isDisplayed() && await placeOrderButton.isEnabled(),
             { timeout: 5000 });
+
         await placeOrderButton.click();
     }
 }
-
-// Export an instance of the CheckoutPage class
 module.exports = new CheckoutPage();

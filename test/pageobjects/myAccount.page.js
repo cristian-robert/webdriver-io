@@ -44,8 +44,13 @@ class MyAccountPage extends Page {
         return $('.woocommerce-MyAccount-content'); // Content section of the account page
     }
 
+    //Wait for content text to be displayed
+
+
     async getContentText() {
-        return this.contentText().getText(); // Getting the text of the content section
+        const contentText = await this.contentText();
+        return await contentText.waitUntil(async () => await contentText.isDisplayed())
+            .then(async () => await contentText.getText()); // Getting the text of the content section
     }
 
     async clickLogoutButton() {
@@ -89,6 +94,35 @@ class MyAccountPage extends Page {
         );
     }
 
+    //wait until login error is displayed
+    async waitForLoginError() {
+        const loginError = await this.loginError();
+        await browser.waitUntil(
+            async () => loginError.isDisplayed(),
+            {
+                timeout: 5000,
+                timeoutMsg: 'expected error message to be visible after 5s'
+            }
+        );
+    }
+
+    //Get login error text
+    async getLoginErrorText() {
+        const loginError = await this.loginError();
+        return await loginError.getText();
+    }
+
+    //Wait for logout button to be displayed
+    async waitForLogoutButton() {
+        const logoutButton = await this.logoutButton();
+        await browser.waitUntil(
+            async () => logoutButton.isDisplayed(),
+            {
+                timeout: 5000,
+                timeoutMsg: 'expected logout button to be visible after 5s'
+            }
+        );
+    }
     // Method for opening the page
     async open () {
         await super.open('my-account/'); // Opens the 'my-account/' page

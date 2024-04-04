@@ -1,8 +1,12 @@
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const constants = require('../utils/constants');
+
 class DatabaseQuery {
     constructor() {
-        this.connection = mysql.createConnection({
+        // Since we're using the promise version of mysql2, the connection
+        // creation is slightly different. We directly assign the promise
+        // returned by createConnection to this.connection.
+        this.connectionPromise = mysql.createConnection({
             host: constants.databaseHost,
             port: constants.databasePort,
             user: constants.databaseUser,
@@ -12,24 +16,26 @@ class DatabaseQuery {
     }
 
     async connect() {
-        this.connection.connect(function (err) {
-            if (err) throw err;
+        try {
+            this.connection = await this.connectionPromise;
             console.log("Connected!");
-        });
+        } catch (err) {
+            console.error('Connection error', err);
+            throw err;
+        }
     }
 
     async disconnect() {
-        this.connection.end();
+        if (this.connection) {
+            await this.connection.end();
+        }
     }
 
-    // make a query to a selected table
     async query(sql) {
-        return new Promise((resolve, reject) => {
-            this.connection.query(sql, function (err, result) {
-                if (err) reject(err);
-                resolve(result);
-            });
-        });
+        if (!this.connection) {
+            await this.connect();
+        }
+        return this.connection.query(sql);
     }
 }
 

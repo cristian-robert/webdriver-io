@@ -15,6 +15,9 @@ class HomePage extends Page {
         return $('#site-header-cart .count');
     }
 
+    async removeFromCartButtons() {
+        return $$('.remove_from_cart_button');
+    }
     async waitForCartHeaderCount(expectedItemCount) {
         await browser.waitUntil(
             async () => {
@@ -53,5 +56,31 @@ class HomePage extends Page {
     async open() {
         await super.open('');
     }
+
+    //check no products in cart, if present remove all
+    async emptyCartIfProductsInCart() {
+        //clear cart if not empty
+        const removeButtons = await this.removeFromCartButtons();
+        const cartItems = await this.cartHeaderCount();
+        const count = await cartItems.getText();
+        if (count !== '0 items') {
+            await cartItems.moveTo();
+            for (let i = 0; i < removeButtons.length; i++) {
+                await (await removeButtons[i]).click();
+            }
+        }
+        // check cart is empty now, if not throw error
+        await browser.waitUntil(
+            async () => {
+                const actualHeaderText = await (await this.cartHeaderCount()).getText();
+                return actualHeaderText === '0 items';
+            },
+            {
+                timeout: 5000,
+                timeoutMsg: 'expected cart header count to be 0 after 5s'
+            }
+        );
+    }
+
 }
 module.exports = new HomePage();

@@ -37,7 +37,7 @@ exports.config = {
     }],
     logLevel: 'info',
     bail: 0,
-    baseUrl: 'http://wordpress:80/',
+    baseUrl: 'http://localhost:8000/',
     waitforTimeout: 10000,
     connectionRetryTimeout: 90000,
     connectionRetryCount: 3,

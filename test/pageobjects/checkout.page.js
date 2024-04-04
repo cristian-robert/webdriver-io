@@ -6,6 +6,9 @@ class CheckoutPage extends Page {
         return $('#email');
     }
 
+    async editAddressButton() {
+        return $('.wc-block-components-address-edit-button');
+    }
     async billingAddressFirstName() {
         return $('#billing-first_name');
     }
@@ -149,7 +152,50 @@ class CheckoutPage extends Page {
         );
     }
     // fill checkout form
-    async fillCheckoutForm(virtualProduct, firstName, lastName, email, phone, address1, city, postcode, country, state) {
+    async fillCheckoutForm(virtualProduct, firstName, lastName, email,
+                           phone, address1, city, postcode, country, state) {
+
+        const orderNotes = await this.orderNotesCheckbox();
+        const orderNotesComments = await this.orderNotesComments();
+
+        if(virtualProduct) {
+            await this.setBillingInformation(firstName, lastName, email, phone,
+                address1, city, country, state, postcode);
+        }
+        else {
+            await this.setShippingInformation(email, firstName, lastName, address1,
+                city, phone, country, state, postcode);
+        }
+        await orderNotes.click();
+        await orderNotesComments.setValue('Please deliver before 5pm');
+    }
+
+    async setShippingInformation(email, firstName, lastName, address1, city, phone, country, state, postcode) {
+        const shippingAddressFirstName = await this.shippingAddressFirstName();
+        const shippingAddressLastName = await this.shippingAddressLastName();
+        const shippingAddressAddress1 = await this.shippingAddressAddress1();
+        const shippingAddressCity = await this.shippingAddressCity();
+        const shippingAddressPostcode = await this.shippingAddressPostcode();
+        const shippingAddressPhone = await this.shippingAddressPhone();
+        const shippingAddressState = await this.shippingAddressState();
+        const useSameAddressCheckbox = await this.useSameAddressCheckbox();
+
+
+        await contactInformationEmailAddress.setValue(email);
+        await shippingAddressFirstName.setValue(firstName);
+        await shippingAddressLastName.setValue(lastName);
+        await shippingAddressAddress1.setValue(address1);
+        await shippingAddressCity.setValue(city);
+        await shippingAddressPhone.setValue(phone);
+        await countrySelect.setValue(country);
+        await browser.keys('\uE007');
+        await shippingAddressState.setValue(state);
+        await browser.keys('\uE007');
+        await shippingAddressPostcode.setValue(postcode);
+        await useSameAddressCheckbox.click();
+    }
+
+    async setBillingInformation(firstName, lastName, email, phone, address1, city, country, state, postcode) {
         const billingAddressFirstName = await this.billingAddressFirstName();
         const billingAddressLastName = await this.billingAddressLastName();
         const contactInformationEmailAddress = await this.contactInformationEmailAddress();
@@ -160,47 +206,17 @@ class CheckoutPage extends Page {
         const countrySelect = await this.countrySelect();
         const billingState = await this.billingAddressState();
 
-        const shippingAddressFirstName = await this.shippingAddressFirstName();
-        const shippingAddressLastName = await this.shippingAddressLastName();
-        const shippingAddressAddress1 = await this.shippingAddressAddress1();
-        const shippingAddressCity = await this.shippingAddressCity();
-        const shippingAddressPostcode = await this.shippingAddressPostcode();
-        const shippingAddressPhone = await this.shippingAddressPhone();
-        const shippingAddressState = await this.shippingAddressState();
-        const orderNotes = await this.orderNotesCheckbox();
-        const orderNotesComments = await this.orderNotesComments();
-        const useSameAddressCheckbox = await this.useSameAddressCheckbox();
-
-        if(virtualProduct) {
-            await billingAddressFirstName.setValue(firstName);
-            await billingAddressLastName.setValue(lastName);
-            await contactInformationEmailAddress.setValue(email);
-            await billingAddressPhone.setValue(phone);
-            await billingAddressAddress1.setValue(address1);
-            await billingAddressCity.setValue(city);
-            await countrySelect.setValue(country);
-            await browser.keys('\uE007');
-            await billingState.setValue(state);
-            await browser.keys('\uE007');
-            await billingAddressPostcode.setValue(postcode);
-        }
-        else {
-            await contactInformationEmailAddress.setValue(email);
-            await shippingAddressFirstName.setValue(firstName);
-            await shippingAddressLastName.setValue(lastName);
-            await shippingAddressAddress1.setValue(address1);
-            await shippingAddressCity.setValue(city);
-            await shippingAddressPhone.setValue(phone);
-            await countrySelect.setValue(country);
-            await browser.keys('\uE007');
-            await shippingAddressState.setValue(state);
-            await browser.keys('\uE007');
-            await shippingAddressPostcode.setValue(postcode);
-            await useSameAddressCheckbox.click();
-        }
-
-        await orderNotes.click();
-        await orderNotesComments.setValue('Please deliver before 5pm');
+        await billingAddressFirstName.setValue(firstName);
+        await billingAddressLastName.setValue(lastName);
+        await contactInformationEmailAddress.setValue(email);
+        await billingAddressPhone.setValue(phone);
+        await billingAddressAddress1.setValue(address1);
+        await billingAddressCity.setValue(city);
+        await countrySelect.setValue(country);
+        await browser.keys('\uE007');
+        await billingState.setValue(state);
+        await browser.keys('\uE007');
+        await billingAddressPostcode.setValue(postcode);
     }
 
     //place order
